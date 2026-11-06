@@ -9,18 +9,21 @@
     "preview": "vite preview --host 127.0.0.1",
     "data:update": "python scripts/update_data.py",
     "api": "python scripts/api.py",
-    "test": "node --test tests/customAssets.test.mjs tests/shareQuotes.test.mjs tests/timeRange.test.mjs tests/quantileScale.test.mjs && python -m unittest discover -s tests -v"
+    "test": "node --test tests/customAssets.test.mjs tests/shareQuotes.test.mjs tests/timeRange.test.mjs tests/quantileScale.test.mjs tests/worker.test.mjs && python -m unittest discover -s tests -v",
+    "deploy:worker": "npm run build && wrangler deploy",
+    "preview:worker": "npm run build && wrangler dev"
   },
   "dependencies": {
+    "echarts": "^6.0.0",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "echarts": "^6.0.0"
+    "react-dom": "^19.0.0"
   },
   "devDependencies": {
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "@vitejs/plugin-react": "^4.4.0",
     "typescript": "~5.8.3",
-    "vite": "^6.3.0"
+    "vite": "^6.3.0",
+    "wrangler": "^4.158.0"
   }
 }

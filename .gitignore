@@ -12,3 +12,4 @@ public/data/
 output/
 .codex-attachments/
 .codex-remote-attachments/
+.wrangler/
