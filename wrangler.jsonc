@@ -4,6 +4,12 @@
   "main": "worker/index.mjs",
   "compatibility_date": "2026-11-06",
   "workers_dev": true,
+  "routes": [
+    {
+      "pattern": "buythedip.kaida.sbs/*",
+      "zone_name": "kaida.sbs"
+    }
+  ],
   "assets": {
     "directory": "./dist",
     "binding": "ASSETS",

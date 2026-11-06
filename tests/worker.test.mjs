@@ -45,6 +45,14 @@ test('snapshot cache TTL differs from dynamic quote TTL', async () => {
   assert.match((await s.run('/api/market?search=000001')).headers.get('Cache-Control'), /s-maxage=60/);
 });
 
+test('cache hits keep browser max-age=0 even if the edge rewrites it', async () => {
+  const s = setup();
+  s.items.set('https://app.example/data/QQQ.json', Response.json({}, { headers: { 'Cache-Control': 'public, max-age=14400, s-maxage=300' } }));
+  const hit = await s.run('/data/QQQ.json');
+  assert.equal(hit.headers.get('X-Market-Cache'), 'HIT');
+  assert.equal(hit.headers.get('Cache-Control'), 'public, max-age=0, s-maxage=300');
+});
+
 test('invalid requests cannot send arbitrary parameters or credentials upstream', async () => {
   const s = setup();
   for (const path of ['/api/market', '/api/market?symbol=QQQ&symbol=SPY', '/api/market?symbol=QQQ&search=000001', '/api/market?symbol=https://bad.example', '/api/market?search=123', '/api/market?symbol=QQQ&url=https://bad.example']) {

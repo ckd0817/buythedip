@@ -31,11 +31,12 @@ export async function handleRequest(request, env, ctx, { fetchOrigin = fetch, ca
       target.searchParams.set('symbol', canonical);
     }
   }
+  const cacheControl = `public, max-age=0, s-maxage=${snapshot ? 300 : 60}`;
   const cacheUrl = new URL(url.pathname, url.origin);
   cacheUrl.search = target.search;
   const key = new Request(cacheUrl, { method: 'GET' });
   const cached = await cache?.match(key);
-  if (cached) return responseFor(request, cached, 'HIT');
+  if (cached) return responseFor(request, cached, 'HIT', cacheControl);
 
   let upstream;
   try {
@@ -59,17 +60,19 @@ export async function handleRequest(request, env, ctx, { fetchOrigin = fetch, ca
   }
   const headers = new Headers({
     'Content-Type': 'application/json; charset=utf-8',
-    'Cache-Control': `public, max-age=0, s-maxage=${snapshot ? 300 : 60}`,
+    'Cache-Control': cacheControl,
     'X-Content-Type-Options': 'nosniff',
   });
   const response = new Response(upstream.body, { status: 200, headers });
   if (cache) ctx.waitUntil(cache.put(key, response.clone()).catch(() => {}));
-  return responseFor(request, response, 'MISS');
+  return responseFor(request, response, 'MISS', cacheControl);
 }
 
-function responseFor(request, response, state) {
+function responseFor(request, response, state, cacheControl) {
   const headers = new Headers(response.headers);
   headers.set('X-Market-Cache', state);
+  // Zone Browser Cache TTL can rewrite max-age on cache matches; browsers must revalidate market data.
+  headers.set('Cache-Control', cacheControl);
   return new Response(request.method === 'HEAD' ? null : response.body, { status: response.status, headers });
 }
 
