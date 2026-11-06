@@ -1,0 +1,11 @@
+[Unit]
+Description=Refresh Buy The Dip HK after market close
+
+[Timer]
+OnCalendar=Mon..Fri *-*-* 16:45:00 Asia/Hong_Kong
+RandomizedDelaySec=90
+Persistent=true
+Unit=buythedip-update@HK.service
+
+[Install]
+WantedBy=timers.target

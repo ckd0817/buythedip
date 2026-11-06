@@ -1,0 +1,11 @@
+[Unit]
+Description=Update after US market close
+
+[Timer]
+OnCalendar=Mon..Fri *-*-* 18:30:00 America/New_York
+OnCalendar=Mon..Fri *-*-* 20:30:00 America/New_York
+Persistent=true
+RandomizedDelaySec=120
+
+[Install]
+WantedBy=timers.target

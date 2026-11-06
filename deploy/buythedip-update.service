@@ -1,0 +1,14 @@
+[Unit]
+Description=Refresh Buy The Dip daily market data
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+User=buythedip
+WorkingDirectory=/opt/buythedip
+Environment=MARKET_PUBLISH_DIR=/var/www/buythedip/data
+ExecStart=/usr/bin/python3 /opt/buythedip/scripts/update_data.py
+TimeoutStartSec=300
+NoNewPrivileges=true
+PrivateTmp=true

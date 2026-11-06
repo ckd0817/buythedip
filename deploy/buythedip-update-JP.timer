@@ -1,0 +1,11 @@
+[Unit]
+Description=Refresh Buy The Dip JP after market close
+
+[Timer]
+OnCalendar=Mon..Fri *-*-* 16:15:00 Asia/Tokyo
+RandomizedDelaySec=90
+Persistent=true
+Unit=buythedip-update@JP.service
+
+[Install]
+WantedBy=timers.target

@@ -1,0 +1,25 @@
+[Unit]
+Description=Buy The Dip instrument API
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=simple
+User=buythedip
+WorkingDirectory=/opt/buythedip/current
+Environment=MARKET_CACHE_DIR=/var/lib/buythedip/instruments
+Environment=MARKET_SNAPSHOT=/var/www/buythedip/data/market.json
+Environment=PYTHONDONTWRITEBYTECODE=1
+ExecStart=/usr/bin/python3 /opt/buythedip/current/scripts/api.py
+Restart=on-failure
+RestartSec=5
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectHome=true
+ProtectSystem=strict
+ReadWritePaths=/var/lib/buythedip/instruments
+MemoryMax=512M
+TasksMax=64
+
+[Install]
+WantedBy=multi-user.target
